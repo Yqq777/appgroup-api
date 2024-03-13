@@ -61,6 +61,12 @@ type AppGroupSpec struct {
 	// Workloads defines the workloads belonging to the group
 	// +required
 	Workloads AppGroupWorkloadList `json:"workloads" protobuf:"bytes,3,rep,name=workloads, casttype=AppGroupWorkloadList"`
+
+	//todo pp tp dp
+	// The hyper-parameter for 3D parallel training (data parallel, pipeline parallel, tensor parallel)
+	DPScale int32 `json:" DPScale,omitempty" protobuf:"bytes,1,opt,name= DPScale "`
+	PPScale int32 `json:" PPScale,omitempty" protobuf:"bytes,1,opt,name= PPScale "`
+	TPScale int32 `json:" TPScale,omitempty" protobuf:"bytes,1,opt,name= TPScale "`
 }
 
 // AppGroupWorkload represents the Workloads belonging to the App Group.
@@ -73,6 +79,19 @@ type AppGroupWorkload struct {
 	// Dependencies of the Workload.
 	// +optional
 	Dependencies DependenciesList `json:"dependencies,omitempty" protobuf:"bytes,2,opt,name=dependencies, casttype=DependenciesList"`
+
+	//todo 对每个pod的位置
+	//Localities of the Workload
+	Localities LocalityInfo `json:"localities,omitempty" protobuf:"bytes,1,opt,name=localities, casttype= LocalityInfo "`
+}
+
+// LocalityInfo contains localities preference about one workload.
+// +protobuf=true
+type LocalityInfo struct {
+	// The locality preference of the workload in 3D training
+	DPLocality bool `json:" DPLocality,omitempty" protobuf:"bytes,1,opt,name= DPLocality "`
+	PPLocality bool `json:" PPLocality,omitempty" protobuf:"bytes,1,opt,name= PPLocality "`
+	TPLocality bool `json:" TPLocality,omitempty" protobuf:"bytes,1,opt,name= TPLocality "`
 }
 
 // AppGroupWorkloadInfo contains information about one workload.
@@ -97,6 +116,12 @@ type AppGroupWorkloadInfo struct {
 	// Namespace of the workload
 	//+optional
 	Namespace string `json:"namespace,omitempty" protobuf:"bytes,5,opt,name=namespace"`
+
+	//todo
+	// The position of the workload in 3D training
+	DPID int32 `json:" DPID,omitempty" protobuf:"bytes,1,opt,name= DPID "`
+	PPID int32 `json:" PPID,omitempty" protobuf:"bytes,1,opt,name= PPID "`
+	TPID int32 `json:" TPID,omitempty" protobuf:"bytes,1,opt,name= TPID "`
 }
 
 // AppGroupWorkloadList contains an array of Pod objects.
